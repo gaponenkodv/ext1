@@ -57,7 +57,6 @@ class FormModel extends Model
      */
     public function sendEmail($email, $userId)
     {
-
         $body = $this->body .
             "\n<a href=http://test.local/form/index?ReturnFormSearch[user_id]={$userId}>Перейти к просмотру</a>";
 

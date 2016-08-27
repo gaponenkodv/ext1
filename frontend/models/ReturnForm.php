@@ -2,9 +2,6 @@
 
 namespace app\models;
 
-use Yii;
-use yii\data\ActiveDataProvider;
-
 /**
  * This is the model class for table "return_form".
  *
@@ -35,7 +32,7 @@ class ReturnForm extends \yii\db\ActiveRecord
             [['user_id', 'body'], 'required'],
             [['user_id'], 'integer'],
             [['body'], 'string', 'max' => 4000],
-            [['datetime'], 'safe'],
+            ['datetime', 'DateRangeValidator'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => ReturnUser::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
