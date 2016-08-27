@@ -1,6 +1,7 @@
 <?php
 
 namespace app\models;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "return_form".
@@ -14,7 +15,8 @@ namespace app\models;
  */
 class ReturnForm extends \yii\db\ActiveRecord
 {
-
+    public $id;
+    public $email;
     /**
      * @inheritdoc
      */
@@ -31,6 +33,7 @@ class ReturnForm extends \yii\db\ActiveRecord
         return [
             [['user_id', 'body'], 'required'],
             [['user_id'], 'integer'],
+            [['user'], 'safe'],
             [['body'], 'string', 'max' => 4000],
             ['datetime', 'DateRangeValidator'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => ReturnUser::className(), 'targetAttribute' => ['user_id' => 'id']],
@@ -56,6 +59,22 @@ class ReturnForm extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(ReturnUser::className(), ['id' => 'user_id']);
+    }
+
+    /**
+     * Получение списка аккаунтов для фильтра
+     *
+     * @return array
+     */
+    public static function getEmailList()
+    {
+        $users = ReturnForm::find()
+            ->select(['user_id', 'email'])
+            ->joinWith(['user'])
+            ->distinct(true)
+            ->all();
+
+        return ArrayHelper::map($users, 'user_id', 'email');
     }
 
 }

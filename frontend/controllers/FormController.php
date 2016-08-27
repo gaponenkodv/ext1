@@ -147,13 +147,13 @@ class FormController extends Controller
         if($model->load(Yii::$app->request->post()) && $model->validate())
         {
             /** проверка количества запросов с одного ip */
-            if($this->checkIp())
+            if(!$this->checkIp())
             {
                 return $this->refresh();
             }
 
             /** проверка количества форм на один email */
-            if($this->checkEmail($model->email))
+            if(!$this->checkEmail($model->email))
             {
                 return $this->refresh();
             }
@@ -161,7 +161,7 @@ class FormController extends Controller
             $returnUser = new ReturnUser;
             $returnForm = new ReturnForm;
 
-            $user = $returnUser->search(['email' => $model->email]);
+            $user = ReturnUser::findOne(['email' => $model->email]);
 
             if(empty($user))
             {
@@ -169,7 +169,7 @@ class FormController extends Controller
                 $returnUser->email = $model->email;
 
                 $returnUser->insert();
-                $user = $returnUser->search(['email' => $model->email]);
+                $user = ReturnUser::findOne(['email' => $model->email]);
             }
 
             $returnForm->user_id = $user->id;
@@ -178,7 +178,7 @@ class FormController extends Controller
 
             $returnForm->insert();
 
-            if($model->sendEmail(Yii::$app->params['email'], $user->id))
+            if($model->sendEmail($model->email, $user->id))
             {
                 Yii::$app->session->setFlash('success', 'Отзыв отправлен');
             }

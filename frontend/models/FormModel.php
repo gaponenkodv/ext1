@@ -64,7 +64,7 @@ class FormModel extends Model
             ->setTo([$email, 'info@awardwallet.com'])
             ->setFrom([$this->email => $this->name])
             ->setSubject('Оставлен отзыв')
-            ->setTextBody($this->body)
+            ->setTextBody($body)
             ->send();
     }
 

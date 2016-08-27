@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use yii\grid\DataColumn;
+use \app\models\ReturnForm;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ReturnFormSearch */
@@ -24,9 +24,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
             'id',
-            'user_id',
+            [
+                'attribute'=>'user_id',
+                'label'=>'Пользователь',
+                'format'=>'text',
+                'value'=>'user.email',
+                'filter' => ReturnForm::getEmailList()
+            ],
             'body:ntext',
 
             ['class' => 'yii\grid\ActionColumn'],

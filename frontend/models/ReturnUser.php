@@ -32,7 +32,7 @@ class ReturnUser extends \yii\db\ActiveRecord
     {
         return [
             [['email', 'name'], 'required'],
-            [['email'], 'email'],
+            ['email', 'email'],
             [['name'], 'string', 'max' => 80],
         ];
     }
@@ -55,32 +55,5 @@ class ReturnUser extends \yii\db\ActiveRecord
     public function getReturnForms()
     {
         return $this->hasMany(ReturnForm::className(), ['user_id' => 'id']);
-    }
-
-    /**
-     * Получение датапровайдера новости
-     *
-     * @param array $params Параметры запроса
-     * @return ActiveDataProvider
-     */
-    public function search($params)
-    {
-        $query = News::find();
-
-        $dataProvider = new ActiveDataProvider(['query' => $query]);
-
-        $this->load($params);
-
-        if(!$this->validate())
-        {
-            return $dataProvider;
-        }
-
-        $query->andFilterWhere(['id' => $this->id]);
-
-        $query->andFilterWhere(['like', 'title', $this->title])
-            ->andFilterWhere(['like', 'body', $this->body]);
-
-        return $dataProvider;
     }
 }
